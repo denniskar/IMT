@@ -1,4 +1,5 @@
 import React from "react";
+import AuthService from "../services/auth.service";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -54,14 +55,15 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
   setIsLoading(true);
 
   if (!!login && !!password) {
-    setTimeout(() => {
-      localStorage.setItem('id_token', 1)
-      setError(null)
-      setIsLoading(false)
-      dispatch({ type: 'LOGIN_SUCCESS' })
+    AuthService.login(login, password).then(() => {
+      setTimeout(() => {
+        setError(null);
+        setIsLoading(false);
+        dispatch({ type: "LOGIN_SUCCESS" });
 
-      history.push('/app/dashboard')
-    }, 2000);
+        history.push("/app/dashboard");
+      }, 2000);
+    });
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
     setError(true);
@@ -70,7 +72,7 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
 }
 
 function signOut(dispatch, history) {
-  localStorage.removeItem("id_token");
+  localStorage.removeItem("user");
   dispatch({ type: "SIGN_OUT_SUCCESS" });
   history.push("/login");
 }
