@@ -23,14 +23,51 @@ const payment = () => {
   return axios.get(API_URL + "/transactions", { headers: authHeader() });
 };
 
-const client =()=>{
-  return axios.get(API_URL+"/clients",{headers:authHeader()})
-}
+const client = () => {
+  return axios.get(API_URL + "/clients", { headers: authHeader() });
+};
+
+const schemes = (id) => {
+  return axios.get(API_URL + "/clients/schemes/" + id, {
+    headers: authHeader(),
+  });
+};
+
+const loans = (id) => {
+  console.log(id);
+  console.log(API_URL + "/clients/loanTypes" + id);
+  return axios.get(API_URL + "/clients/loanTypes/" + id, {
+    headers: authHeader(),
+  });
+};
+
+const states = (code) => {
+  return axios.get(API_URL + "/country/" + code + "/states", {
+    headers: authHeader(),
+  });
+};
+
+const country = () => {
+  return axios.get(API_URL + "/country", { headers: authHeader() });
+};
+
+const currencyPair = () => {
+  return axios.get(API_URL + "/currency/pair", { headers: authHeader() });
+};
+const exchangeRate = () => {
+  return axios.get(API_URL + "/currency/rates", { headers: authHeader() });
+};
 export default {
   getPublicContent,
   getUserBoard,
   getModeratorBoard,
   getAdminBoard,
   payment,
-  client
+  client,
+  loans,
+  schemes,
+  states,
+  country,
+  currencyPair,
+  exchangeRate,
 };
