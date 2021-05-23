@@ -3,7 +3,7 @@ import { Grid, Paper, TextField } from "@material-ui/core";
 
 // styles
 import useStyles from "./styles";
-
+import Select from "react-select";
 // components
 import PageTitle from "../../components/PageTitle";
 import Widget from "../../components/Widget";
@@ -23,100 +23,96 @@ export default function NotificationsPage() {
                   <Grid item xs={6} sm={6}>
                     <TextField
                       fullWidth
-                      label="First Name "
+                      label="Beneficiary firstName "
                       name="city"
                       variant="outlined"
                       margin="normal"
-                      required
+                      //   onChange={(e) => setBfirstName(e.target.value)}
                     />
                   </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Beneficiary SecondName "
+                      name="city"
+                      variant="outlined"
+                      margin="normal"
+                      //  onChange={(e) => setBsecondname(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Email Address "
+                      name="city"
+                      variant="outlined"
+                      margin="normal"
+                      //    onChange={(e) => setEmail2(e.target.value)}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6} sm={6}>
+                    <Select
+                      label="Country"
+                      placeholder="Country"
+                      //   options={countryCode}
+                      //  onChange={selectState}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Beneficiary phone number "
+                      // value={"+" + phonePrefix}
+                      variant="outlined"
+                      // onChage={(e) => setPhonePrefix(e.target.value)}
+                      margin="normal"
+                    >
+                      <Select />
+                    </TextField>
+                  </Grid>
+
+                  <Grid item xs={6} sm={6}>
+                    <Select
+                      fullWidth
+                      placeholder="State"
+                      label=" select States"
+                      //  options={unitedstates}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6} sm={6}>
+                    <Select
+                      //  options={client}
+                      //  onChange={handleChange}
+                      placeholder="Client"
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <Select
+                      //options={options}
+                      //onChange={fetchSchemes}
+                      placeholder="Schemes"
+                    />
+                  </Grid>
+
+                  <Grid item xs={6} sm={6}>
+                    <Select
+                      //   options={finalOption}
+                      placeholder="Details"
+                      //  onChange={schemes}
+                    />
+                  </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="Second Name "
-                      name="city"
+                      label="Brief Description"
+                      name="lastName"
                       variant="outlined"
+                      //  onChange={(e) => setDescription(e.target.value)}
                       margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Other Name "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Phone Number "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label=" Email Address"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="country Name"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="state"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Address 1"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Address 2"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Password"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      required
                     />
                   </Grid>
                 </Grid>
@@ -129,49 +125,34 @@ export default function NotificationsPage() {
             <div className={classes.PaymentBar}>
               <Paper className={classes.layout}>
                 <Grid className={classes.paper} container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
+                  <Grid item xs={6} sm={6}>
+                    <Select
                       fullWidth
-                      label="Card Number"
-                      name="lastName"
+                      placeholder="Currency Pair"
+                      // options={storePair}
+                      // onChange={currencyRate}
                       variant="outlined"
-                      margin="normal"
-                      required
                     />
                   </Grid>
-
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="CSV"
+                      //  label={"Enter Amount in " + currencyLabel}
                       name="lastName"
                       variant="outlined"
+                      // onChange={(e) => converter(e.target.value)}
                       margin="normal"
-                      required
                     />
                   </Grid>
-
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      variant="outlined"
-                      label="Card Expiry Date"
-                      name="date"
-                      // type="date"
-                      defaultValue="2021-12"
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Card Name Holder"
+                      label={"Amount converted to"}
                       name="lastName"
                       variant="outlined"
+                      // value={afterExchage * 109.1}
+                      // onChange={(e) => setAmount(e.target.value)}
                       margin="normal"
-                      required
                     />
                   </Grid>
                 </Grid>

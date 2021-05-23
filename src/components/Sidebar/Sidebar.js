@@ -29,7 +29,74 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 
-const structure = [
+const structure = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userp = [
+    { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
+    {
+      id: 1,
+      label: "Send Money",
+      link: "/app/typography",
+      icon: <TypographyIcon />,
+    },
+    {
+      id: 2,
+      label: "Transaction Details",
+      link: "/app/tables",
+      icon: <TableIcon />,
+    },
+    {
+      id: 3,
+      label: "Quick send",
+      link: "/app/notifications",
+      icon: <NotificationsIcon />,
+    },
+  ];
+
+  const Admin = [
+    { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
+    {
+      id: 4,
+      label: "Admin",
+      link: "/app/ui",
+      icon: <UIElementsIcon />,
+      children: [
+        { label: "view Transactions", link: "/app/ui/icons" },
+        { label: "Add client", link: "/app/ui/charts" },
+        { label: "register user", link: "/app/ui/maps" },
+      ],
+    },
+    { id: 5, type: "divider" },
+    { id: 6, type: "title", label: "HELP" },
+
+    {
+      id: 8,
+      label: "Support",
+      link: "https://flatlogic.com/forum",
+      icon: <SupportIcon />,
+    },
+    {
+      id: 9,
+      label: "FAQ",
+      link: "https://flatlogic.com/forum",
+      icon: <FAQIcon />,
+    },
+    { id: 10, type: "divider" },
+    {
+      id: 9,
+      label: "Settings",
+      link: "https://flatlogic.com/forum",
+      icon: <FAQIcon />,
+    },
+  ];
+  if (user.data.roles.role === "ADMIN") {
+    return Admin;
+  } else if (user.data.roles.role === "USER") {
+    return userp;
+  }
+};
+
+const tructure = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
   {
     id: 1,
@@ -51,13 +118,13 @@ const structure = [
   },
   {
     id: 4,
-    label: "UI Elements",
+    label: "Admin",
     link: "/app/ui",
     icon: <UIElementsIcon />,
     children: [
-      { label: "Icons", link: "/app/ui/icons" },
-      { label: "Charts", link: "/app/ui/charts" },
-      { label: "Maps", link: "/app/ui/maps" },
+      { label: "view Transactions", link: "/app/ui/icons" },
+      { label: "Add client", link: "/app/ui/charts" },
+      { label: "register user", link: "/app/ui/maps" },
     ],
   },
   { id: 5, type: "divider" },
@@ -129,7 +196,7 @@ function Sidebar({ location }) {
         </IconButton>
       </div>
       <List className={classes.sidebarList}>
-        {structure.map((link) => (
+        {structure().map((link) => (
           <SidebarLink
             key={link.id}
             location={location}

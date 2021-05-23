@@ -5,12 +5,17 @@ export default makeStyles((theme) => ({
     border: "1px dashed",
     borderColor: theme.palette.primary.main,
     padding: theme.spacing(2),
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(0),
     paddingBottom: theme.spacing(4),
     marginTop: theme.spacing(1),
   },
   text: {
     marginBottom: theme.spacing(2),
+  },
+  button: {
+    marginBottom: theme.spacing(2),
+    marginLeft: theme.spacing(30),
+    alignItems: "center",
   },
   PaymentBar: {
     position: "relative",
@@ -31,11 +36,11 @@ export default makeStyles((theme) => ({
     },
   },
   paper: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(0),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(8),
+      marginTop: theme.spacing(0),
       marginBottom: theme.spacing(8),
       padding: theme.spacing(3),
     },
