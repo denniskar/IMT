@@ -48,7 +48,7 @@ const states = (code) => {
 };
 
 const country = () => {
-  return axios.get(API_URL + "/country", { headers: authHeader() });
+  return axios.get(API_URL + "/country");
 };
 
 const currencyPair = () => {
@@ -56,6 +56,21 @@ const currencyPair = () => {
 };
 const exchangeRate = () => {
   return axios.get(API_URL + "/currency/rates", { headers: authHeader() });
+};
+
+const transaction = () => {
+  return axios.get(API_URL + "/transactions", { headers: authHeader() });
+};
+const users = () => {
+  return axios.get(API_URL + "/users", { headers: authHeader() });
+};
+
+const clients = () => {
+  return axios.get(API_URL + " /clients", { headers: authHeader() });
+};
+
+const userTransactions = () => {
+  return axios.get(API_URL + "", { headers: authHeader() });
 };
 export default {
   getPublicContent,
@@ -69,5 +84,9 @@ export default {
   states,
   country,
   currencyPair,
+  transaction,
   exchangeRate,
+  users,
+  clients,
+  userTransactions,
 };

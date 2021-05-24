@@ -21,120 +21,83 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-input-2/lib/style.css";
 import { mdiVideoMinusOutline } from "@mdi/js";
 import axios from "axios";
-
+import MUIDataTable from "mui-datatables";
 export default function TypographyPage() {
-  const [client, setClient] = useState("");
-  const [storeValue, SetStoreValue] = useState("");
-  const [finalOption, setFinalOption] = useState("");
-  const [phone, setPhone] = useState("");
-  const [unitedstates, SetUnitedStates] = useState("");
-  const [countryCode, setCountryCode] = useState("");
-  const [storePair, setStorePair] = useState("");
-  const [afterExchage, setAfterExchane] = useState("");
-  const [phonePrefix, setPhonePrefix] = useState("");
-  const [currencyLabel, setCurrencyLabel] = useState("");
-  const [currencyLabel1, setCurrencyLabel2] = useState("");
-  const [showScheduled, setShowScheduled] = useState(false);
-
-  ///submit values
-  const [email1, setEmail1] = useState("");
-  const [email2, setEmail2] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [adress2, setAddress2] = useState("");
-  const [amount, setAmount] = useState("");
-  const [bFirstname, setBfirstName] = useState("");
-  const [bSecondName, setBsecondname] = useState("");
-  const [description, setDescription] = useState("");
-  const [ftransactionTypeCode, setfTransactionTypeCode] = useState("");
-
-  //modified select values
-  const [schemess, setSchemes] = useState("");
-  const [ustates, setUStates] = useState("");
-  const [country, setCountry] = useState("");
-  const [currencyPair, setCurrencyPair] = useState("");
-  const [converted, setConverted] = useState("");
-  const [country2, setcountry2] = useState("");
-  //const[singleCurrency,setSingleCurrrency]=useState("");
-
-  console.log(amount);
-  toast.configure();
+  //const user = JSON.parse(localStorage.getItem("user"));
+  const [userData, setUserData] = useState([]);
   useEffect(() => {
-    UserService.payment().then((response) => {});
-  }, []);
-
-  useEffect(() => {
-    UserService.client().then((response) => {
-      const clients = response.data.map((client) => ({
-        value: client.clientId,
-        label: client.clientName,
-      }));
-
-      setClient(clients);
+    userService.users().then((res) => {
+      console.log(res.data);
+      setUserData(res.data);
     });
   }, []);
-
-  var classes = useStyles();
-
-  const [cvc, setCvc] = useState("");
-  const [number, setNumber] = useState("");
-  const [name, setName] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [focus, setFocus] = useState("");
-  const [secondName, setSecondNmae] = useState("");
-
-  const options = [
-    { value: "1", label: "Fosa" },
-    { value: "2", label: "Loan" },
-    { value: "3", label: "Schemes" },
+  const data = [
+    {
+      status: "Active",
+      phoneNumber: "254704034231",
+      roles: {
+        role: "USER",
+        privileges: [],
+      },
+      email: "test1@lanstar.co.ke",
+      dateCreated: "2021-04-16 11:57:03",
+      firstName: "Test",
+      otherName: "",
+      lastName: "Test",
+      id: 6,
+      country: "Kenya",
+    },
   ];
 
-  const handleChange = (value) => {
-    SetStoreValue(value.value);
-  };
+  const modifiedData = userData.map((datas) => ({
+    firstName: datas.firstName,
+    lastName: datas.lastName,
+    roles: datas.roles.role,
+    email: datas.email,
+    country: datas.country,
+    date: datas.dateCreated,
+    status: datas.status,
+    phoneNumber: datas.phoneNumber,
+  }));
 
-  const fetchSchemes = (value) => {
-    const code = value.label;
-    setfTransactionTypeCode(code);
-    if (value.value == "3") {
-      userService.schemes(storeValue).then((response) => {
-        console.log(response);
-        const schemes = response.data.map((scheme) => ({
-          value: scheme.code,
-          label: scheme.name,
-        }));
+  const columns = [
+    { name: "firstName", label: " fName" },
+    { name: "lastName", label: "LName" },
+    { name: "roles", label: " Role" },
+    { name: "phoneNumber", label: "Pnumber" },
+    { name: "country", label: " country" },
+    { name: "status", label: "status" },
+  ];
 
-        setFinalOption(schemes);
-      });
-    } else if (value.value == "2") {
-      userService.loans(storeValue).then((response) => {
-        console.log(response);
-        const loans = response.data.map((loan) => ({
-          value: loan.code,
-          label: loan.name,
-        }));
+  //const[singleCurrency,setSingleCurrrency]=useState("");
+  const [name, setName] = useState("");
+  const [sname, setSecond] = useState("");
+  const [passwordi, setPasswordi] = useState("");
+  const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
+  const [roles, setRoles] = useState("");
+  const [code, setCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  var classes = useStyles();
 
-        setFinalOption(loans);
-      });
-    } else if (value.value === null) {
-      window.alert("please select the client ");
-    } else {
-      return 0;
-    }
-  };
+  const options = [
+    { value: "1", label: "USER" },
+    { value: "2", label: "ADMIN" },
+    { value: "3", label: "CLIENTADMIN" },
+    { value: "4", label: "CLIENTUSER" },
+  ];
 
   const selectState = (value) => {
-    setCountry(value.value);
-    setcountry2(value.value);
-    setPhonePrefix(value.phoneCode);
-    userService.states(value.value).then((res) => {
-      const states = res.data.map((state) => ({
-        value: state.code,
-        label: state.state,
-      }));
+    console.log(value);
+    setCountry(value.label);
+    setCode(value.value);
+    setPhone("+" + value.phoneCode);
+  };
 
-      console.log(states);
-      SetUnitedStates(states);
-    });
+  const handleRoles = (values) => {
+    console.log(values.label);
+    setRoles(values.label);
   };
 
   useEffect(() => {
@@ -148,46 +111,23 @@ export default function TypographyPage() {
     });
   }, []);
 
-  useEffect(() => {
-    userService.currencyPair().then((response) => {
-      const pairs = response.data.map((pair) => ({
-        value: pair.id,
-        label: pair.pair,
-      }));
-      setStorePair(pairs);
-    });
-  }, []);
-
-  const currencyRate = (value) => {
-    setCurrencyPair(value.label);
-    const split = value.label.toString();
-    const splited = split.substring(0, 3);
-    const splited2 = split.substring(5, 9);
-    setCurrencyLabel(splited);
-    setCurrencyLabel2(splited2);
-    userService.exchangeRate().then((response) => {
-      console.log(response);
-    });
-  };
-
-  const exchange = (e) => {
-    console.log(e);
-  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = {
-      firstName: "lanster",
+      firstName: name,
       otherName: "",
-      lastName: "lanster",
-      email: "lanster@lanstar.co.ke",
+      lastName: sname,
+      email: email,
       phoneNumber: {
-        phone: "254704033541",
-        countryCode: "KE",
+        phone: phone,
+        countryCode: code,
       },
-      password: "lanster",
-      country: "KENYA",
-      role: "USER",
+      password: passwordi,
+      country: country,
+      role: roles,
     };
+
+    console.log(formData);
     axios
       .post("/api/qsend/v1/users", formData, { headers: authHeader() })
       .then(function (res) {
@@ -216,21 +156,6 @@ export default function TypographyPage() {
     console.log(formData);
   };
 
-  const scheduled = () => {
-    setShowScheduled(!showScheduled);
-  };
-
-  const converter = (values) => {
-    setAfterExchane(values);
-    setConverted(values * 109.9);
-  };
-
-  const selectedState = (value) => {
-    setUStates(value.value);
-  };
-  const schemes = (value) => {
-    setSchemes(value.value);
-  };
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={4}>
@@ -245,10 +170,9 @@ export default function TypographyPage() {
                       label="First Name"
                       name="firstname"
                       variant="outlined"
-                      margin="normal"
                       value={name}
+                      margin="normal"
                       onChange={(e) => setName(e.target.value)}
-                      onFocus={(e) => setFocus(e.target.name)}
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -257,7 +181,8 @@ export default function TypographyPage() {
                       label="Second Name "
                       name="city"
                       variant="outlined"
-                      onChange={(e) => setSecondNmae(e.target.value)}
+                      value={sname}
+                      onChange={(e) => setSecond(e.target.value)}
                       margin="normal"
                     />
                   </Grid>
@@ -270,24 +195,13 @@ export default function TypographyPage() {
                       onChange={selectState}
                     />
                   </Grid>
-
                   <Grid item xs={6} sm={6}>
                     <Select
                       fullWidth
                       placeholder="role"
                       label=" select States"
-                      options={unitedstates}
-                      onChange={selectedState}
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email Addreess "
-                      variant="outlined"
-                      margin="normal"
-                      onchange={(e) => setEmail1(e.target.value)}
+                      options={options}
+                      onChange={handleRoles}
                     />
                   </Grid>
 
@@ -295,33 +209,35 @@ export default function TypographyPage() {
                     <TextField
                       fullWidth
                       label="phoneNumber "
+                      variant="outlined"
+                      value={phone}
+                      margin="normal"
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Email "
                       name="city"
                       variant="outlined"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       margin="normal"
-                      onchange={(e) => setAddress2(e.target.value)}
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
                       fullWidth
                       label="password "
-                      name="city"
                       type="password"
                       variant="outlined"
                       margin="normal"
-                      onchange={(e) => setAddress1(e.target.value)}
+                      value={passwordi}
+                      onChange={(e) => setPasswordi(e.target.value)}
                     />
                   </Grid>
                 </Grid>
-              </Paper>
-            </div>
-          </Widget>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Widget title="users  tables" disableWidgetMenu>
-            <div className={classes.PaymentBar}>
-              <Paper className={classes.layout}>
-                <Grid className={classes.paper} container spacing={2}></Grid>
                 <Grid item xs={6} sm={6}>
                   <Button
                     variant="contained"
@@ -333,6 +249,20 @@ export default function TypographyPage() {
                   </Button>
                 </Grid>
               </Paper>
+            </div>
+          </Widget>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Widget title="users  tables" disableWidgetMenu>
+            <div className={classes.PaymentBar}>
+              <MUIDataTable
+                title="Transactions"
+                data={modifiedData}
+                columns={columns}
+                options={{
+                  filterType: "checkbox",
+                }}
+              />
             </div>
           </Widget>
         </Grid>

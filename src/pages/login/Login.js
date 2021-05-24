@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   CircularProgress,
@@ -13,6 +13,10 @@ import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 import authHeader from "../../services/auth-header";
 import userService from "../../services/user.service";
+import Select from "react-select";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // styles
 import useStyles from "./styles";
 
@@ -22,7 +26,10 @@ import google from "../../images/google.svg";
 
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
+import axios from "axios";
+import { mdiReload } from "@mdi/js";
 
+toast.configure();
 function Login(props) {
   var classes = useStyles();
 
@@ -37,6 +44,26 @@ function Login(props) {
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
 
+  const [courntryCode, setCountryCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [sName, setSname] = useState("");
+  const [password, setPassword] = useState("");
+  const [country, setCountry] = useState("");
+  const [code, setCode] = useState("");
+
+  const Reload = () => {
+    setCountryCode("");
+    setPhoneNumber("");
+    setEmail("");
+    setFirstName("");
+    setSname("");
+    setPassword("");
+    setCountry("");
+    setCode("");
+  };
+
   useEffect(() => {
     userService.country().then((res) => {
       const countries = res.data.map((country) => ({
@@ -44,11 +71,66 @@ function Login(props) {
         label: country.countryName,
         phoneCode: country.phonePrefix,
       }));
+      console.log(countries);
       setCountryCode(countries);
     });
   }, []);
 
-  const register = () => {};
+  const phoneDetails = (value) => {
+    const co = value.value;
+    setCountry(co);
+    setPhoneNumber("+" + value.phoneCode);
+    setCode(value.label);
+  };
+
+  const register = () => {
+    const formData = {
+      firstName: firstName,
+      otherName: "",
+      lastName: sName,
+      email: email,
+      phoneNumber: {
+        phone: phoneNumber,
+        countryCode: country,
+      },
+      password: password,
+      country: code,
+    };
+
+    console.log(formData);
+
+    axios
+      .post("/api/qsend/v1/users/self-register", formData)
+      .then(function (res) {
+        if (res.data.status === 0) {
+          // Swal.fire(
+          //     '',
+          //     res.data.message,
+          //     'success'
+          // )
+          toast.success(
+            " Hi,you have been registered Successfully,please Login",
+            {
+              position: toast.POSITION.TOP_CENTER,
+            },
+          );
+
+          Reload();
+        } else {
+          // Swal.fire(
+          //     '',
+          //     res.data.message,
+          //     'error'
+          // )
+          toast.error(res.data.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <Grid container className={classes.container}>
@@ -70,16 +152,12 @@ function Login(props) {
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
-              <Typography variant="h1" className={classes.greeting}>
-                Good Morning
+              <Typography variant="h3" className={classes.greeting}>
+                welcome to Qsend
               </Typography>
-              <Button size="large" className={classes.googleButton}>
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button>
+
               <div className={classes.formDividerContainer}>
                 <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
               </div>
               <Fade in={error}>
@@ -154,10 +232,10 @@ function Login(props) {
           )}
           {activeTabId === 1 && (
             <React.Fragment>
-              <Typography variant="h1" className={classes.greeting}>
+              <Typography variant="h5" className={classes.greeting}>
                 Welcome!
               </Typography>
-              <Typography variant="h2" className={classes.subGreeting}>
+              <Typography variant="h6" className={classes.subGreeting}>
                 Create your account
               </Typography>
               <Fade in={error}>
@@ -166,30 +244,44 @@ function Login(props) {
                 </Typography>
               </Fade>
               <TextField
-                id="name"
-                InputProps={{
-                  classes: {
-                    underline: classes.textFieldUnderline,
-                    input: classes.textField,
-                  },
-                }}
-                value={nameValue}
-                onChange={(e) => setNameValue(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 margin="normal"
-                placeholder="Full Name"
+                placeholder="first Name"
                 type="text"
                 fullWidth
               />
+
+              <TextField
+                value={sName}
+                onChange={(e) => setSname(e.target.value)}
+                margin="normal"
+                placeholder="Second Name"
+                type="text"
+                fullWidth
+              />
+              <Select
+                onChange={phoneDetails}
+                margin="normal"
+                placeholder="Select Country"
+                type="text"
+                fullWidth
+                options={courntryCode}
+              />
+
+              <TextField
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                margin="normal"
+                placeholder="Phone Number"
+                type="text"
+                fullWidth
+              />
+
               <TextField
                 id="email"
-                InputProps={{
-                  classes: {
-                    underline: classes.textFieldUnderline,
-                    input: classes.textField,
-                  },
-                }}
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 margin="normal"
                 placeholder="Email Adress"
                 type="email"
@@ -197,14 +289,8 @@ function Login(props) {
               />
               <TextField
                 id="password"
-                InputProps={{
-                  classes: {
-                    underline: classes.textFieldUnderline,
-                    input: classes.textField,
-                  },
-                }}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -215,20 +301,14 @@ function Login(props) {
                   <CircularProgress size={26} />
                 ) : (
                   <Button
-                    onClick={() =>
-                      loginUser(
-                        userDispatch,
-                        loginValue,
-                        passwordValue,
-                        props.history,
-                        setIsLoading,
-                        setError,
-                      )
-                    }
+                    onClick={() => register()}
                     disabled={
-                      loginValue.length === 0 ||
-                      passwordValue.length === 0 ||
-                      nameValue.length === 0
+                      password.length === 0 ||
+                      email.length === 0 ||
+                      sName.length === 0 ||
+                      firstName.length === 0 ||
+                      courntryCode.length === 0 ||
+                      phoneNumber.length === 0
                     }
                     size="large"
                     variant="contained"
@@ -240,29 +320,14 @@ function Login(props) {
                   </Button>
                 )}
               </div>
-              <div className={classes.formDividerContainer}>
-                <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
-                <div className={classes.formDivider} />
-              </div>
-              <Button
-                size="large"
-                className={classnames(
-                  classes.googleButton,
-                  classes.googleButtonCreating,
-                )}
-              >
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button>
             </React.Fragment>
           )}
         </div>
         <Typography color="primary" className={classes.copyright}>
-          © 2014-{new Date().getFullYear()}{" "}
+          © {new Date().getFullYear()}{" "}
           <a
             style={{ textDecoration: "none", color: "inherit" }}
-            href="https://flatlogic.com"
+            href="https://lanstar.co.ke"
             rel="noopener noreferrer"
             target="_blank"
           >

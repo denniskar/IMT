@@ -361,10 +361,10 @@ export default function TypographyPage() {
                     <TextField
                       fullWidth
                       label=" phone number "
-                      placeholder={"+" + phonePrefix}
-                      variant="outlined"
-                      onChage={(e) => setPhonePrefix(e.target.value)}
+                      value={phonePrefix}
+                      onChange={(e) => setPhonePrefix(e.target.value)}
                       margin="normal"
+                      type="text"
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
