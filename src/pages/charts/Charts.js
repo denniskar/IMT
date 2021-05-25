@@ -19,7 +19,7 @@ import userService from "../../services/user.service";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-input-2/lib/style.css";
-import { mdiVideoMinusOutline } from "@mdi/js";
+import { mdiReload, mdiVideoMinusOutline } from "@mdi/js";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 export default function Charts() {
@@ -63,6 +63,22 @@ export default function Charts() {
   const [email, setEmail] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [registration, setRegistration] = useState("");
+
+  const reload = () => {
+    setName("");
+    setClientId("");
+    setAddress("");
+    setPhone("");
+    setCode("");
+    setEmail("");
+    setCountryCode("");
+    setRegistration("");
+  };
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   var classes = useStyles();
 
   const options = [
@@ -120,9 +136,10 @@ export default function Charts() {
           //     res.data.message,
           //     'success'
           // )
-          toast.success(res.data.status, {
+          toast.success(res.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
+          reload();
           // reset for
         } else {
           // Swal.fire(
@@ -156,6 +173,7 @@ export default function Charts() {
                       value={name}
                       margin="normal"
                       onChange={(e) => setName(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -167,6 +185,7 @@ export default function Charts() {
                       value={clientId}
                       onChange={(e) => setClientId(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -178,6 +197,7 @@ export default function Charts() {
                       value={registration}
                       onChange={(e) => setRegistration(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
 
@@ -187,6 +207,7 @@ export default function Charts() {
                       placeholder="Country"
                       options={countryCode}
                       onChange={selectState}
+                      required
                     />
                   </Grid>
 
@@ -198,6 +219,7 @@ export default function Charts() {
                       value={phone}
                       margin="normal"
                       onChange={(e) => setPhone(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -209,6 +231,7 @@ export default function Charts() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -219,6 +242,7 @@ export default function Charts() {
                       margin="normal"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
+                      required
                     />
                   </Grid>
                 </Grid>
@@ -245,6 +269,7 @@ export default function Charts() {
                 columns={columns}
                 options={{
                   filterType: "checkbox",
+                  rowsPerPage: 6,
                 }}
               />
             </div>

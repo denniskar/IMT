@@ -35,7 +35,7 @@ const structure = () => {
     { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
     {
       id: 1,
-      label: "Send Money",
+      label: "Make Remittance",
       link: "/app/typography",
       icon: <TypographyIcon />,
     },
@@ -50,6 +50,28 @@ const structure = () => {
       label: "Quick send",
       link: "/app/notifications",
       icon: <NotificationsIcon />,
+    },
+    { id: 5, type: "divider" },
+    { id: 6, type: "title", label: "HELP" },
+
+    {
+      id: 8,
+      label: "Support",
+      link: "https://lanstar.co.ke",
+      icon: <SupportIcon />,
+    },
+    {
+      id: 9,
+      label: "FAQ",
+      link: "https://lanstar.co.ke",
+      icon: <FAQIcon />,
+    },
+    { id: 10, type: "divider" },
+    {
+      id: 9,
+      label: "Settings",
+      link: "https://lanstar.co.ke",
+      icon: <FAQIcon />,
     },
   ];
 
@@ -72,20 +94,20 @@ const structure = () => {
     {
       id: 8,
       label: "Support",
-      link: "https://flatlogic.com/forum",
+      link: "https://lanstar.co.ke",
       icon: <SupportIcon />,
     },
     {
       id: 9,
       label: "FAQ",
-      link: "https://flatlogic.com/forum",
+      link: "https://lanstar.co.ke",
       icon: <FAQIcon />,
     },
     { id: 10, type: "divider" },
     {
       id: 9,
       label: "Settings",
-      link: "https://flatlogic.com/forum",
+      link: "https://lanstar.co.ke",
       icon: <FAQIcon />,
     },
   ];

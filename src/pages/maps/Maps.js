@@ -261,6 +261,7 @@ export default function TypographyPage() {
                 columns={columns}
                 options={{
                   filterType: "checkbox",
+                  rowsPerPage: 6,
                 }}
               />
             </div>

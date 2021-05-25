@@ -62,6 +62,7 @@ function Login(props) {
     setPassword("");
     setCountry("");
     setCode("");
+    activeTabId(0);
   };
 
   useEffect(() => {

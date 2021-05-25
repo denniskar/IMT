@@ -158,26 +158,6 @@ const mock = {
       city: "Leadville North",
       status: "Pending",
     },
-    {
-      id: 3,
-      Client: "Joseph May",
-      email: "josephmay@wxample.com",
-      Street: "Version Control",
-      Amount: "$5 224.5",
-      date: "19 Feb 2018",
-      city: "Seaforth",
-      status: "Declined",
-    },
-    {
-      id: 4,
-      Client: "Peter Horadnia",
-      email: "horadnia@wxample.com",
-      Street: "Let's Dance",
-      Amount: "$43 594.7",
-      date: "1 Mar 2018",
-      city: "Hanoverton",
-      status: "Sent",
-    },
   ],
 };
 

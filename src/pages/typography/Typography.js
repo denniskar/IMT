@@ -46,6 +46,9 @@ export default function TypographyPage() {
   const [bSecondName, setBsecondname] = useState("");
   const [description, setDescription] = useState("");
   const [ftransactionTypeCode, setfTransactionTypeCode] = useState("");
+  const [prefix, setPprefix] = useState("");
+  const [code1, setCode1] = useState("");
+  const [code2, setCode2] = useState("");
 
   //modified select values
   const [schemess, setSchemes] = useState("");
@@ -56,11 +59,23 @@ export default function TypographyPage() {
   const [country2, setcountry2] = useState("");
   //const[singleCurrency,setSingleCurrrency]=useState("");
 
-  console.log(amount);
   toast.configure();
-  useEffect(() => {
-    UserService.payment().then((response) => {});
-  }, []);
+
+  const reload = () => {
+    setEmail1("");
+    setEmail2("");
+    setAddress1("");
+    setAddress2("");
+    setAmount("");
+    setBfirstName("");
+    setBsecondname("");
+    setDescription("");
+    setfTransactionTypeCode("");
+    setPprefix("");
+    setCountry("");
+    setConverted("");
+    setcountry2("");
+  };
 
   useEffect(() => {
     UserService.client().then((response) => {
@@ -97,7 +112,6 @@ export default function TypographyPage() {
     setfTransactionTypeCode(code);
     if (value.value == "3") {
       userService.schemes(storeValue).then((response) => {
-        console.log(response);
         const schemes = response.data.map((scheme) => ({
           value: scheme.code,
           label: scheme.name,
@@ -107,7 +121,6 @@ export default function TypographyPage() {
       });
     } else if (value.value == "2") {
       userService.loans(storeValue).then((response) => {
-        console.log(response);
         const loans = response.data.map((loan) => ({
           value: loan.code,
           label: loan.name,
@@ -123,9 +136,13 @@ export default function TypographyPage() {
   };
 
   const selectState = (value) => {
+    console.log(value);
+    console.log(value.value);
     setCountry(value.value);
-    setcountry2(value.value);
-    setPhonePrefix(value.phoneCode);
+    setCode1(value.label);
+
+    setPhonePrefix("+" + value.phoneCode);
+
     userService.states(value.value).then((res) => {
       const states = res.data.map((state) => ({
         value: state.code,
@@ -135,6 +152,11 @@ export default function TypographyPage() {
       console.log(states);
       SetUnitedStates(states);
     });
+  };
+  const selectCountry = (value) => {
+    setPprefix("+" + value.phoneCode);
+    setcountry2(value.value);
+    setCode2(value.label);
   };
 
   useEffect(() => {
@@ -188,8 +210,8 @@ export default function TypographyPage() {
         lastName: bSecondName,
         clientId: storeValue, // clientId of client to which beneficiary belongs
         phone: {
-          phone: +254784435333,
-          countryCode: "KE",
+          phone: prefix,
+          countryCode: country2,
         },
       },
       billingInformation: {
@@ -201,14 +223,14 @@ export default function TypographyPage() {
         firstName: name,
         lastName: secondName,
         phone: {
-          phone: +254796785456,
-          countryCode: "KE",
+          phone: phonePrefix,
+          countryCode: country,
         },
         currency: currencyLabel1, // retrieve from currency pair in question
         state: ustates, // if country is US ,use USA states
-        country: country,
-        address1: "rehrb",
-        address2: "werff",
+        country: code1,
+        address1: address1,
+        address2: adress2,
       },
     };
     axios
@@ -220,10 +242,10 @@ export default function TypographyPage() {
           //     res.data.message,
           //     'success'
           // )
-          toast.success(res.data.status, {
+          toast.success(res.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
-          // reset for
+          reload();
         } else {
           // Swal.fire(
           //     '',
@@ -235,8 +257,6 @@ export default function TypographyPage() {
           });
         }
       });
-
-    console.log(formData);
   };
 
   const scheduled = () => {
@@ -282,6 +302,7 @@ export default function TypographyPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       onFocus={(e) => setFocus(e.target.name)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -292,6 +313,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       onChange={(e) => setSecondNmae(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
 
@@ -306,6 +328,7 @@ export default function TypographyPage() {
                       margin="normal"
                       onChange={(e) => setNumber(e.target.value)}
                       onFocus={(e) => setFocus(e.target.name)}
+                      required
                     />
                   </Grid>
 
@@ -322,6 +345,7 @@ export default function TypographyPage() {
                       value={expiry}
                       onChange={(e) => setExpiry(e.target.value)}
                       onFocus={(e) => setFocus(e.target.name)}
+                      required
                     />
                   </Grid>
 
@@ -335,6 +359,7 @@ export default function TypographyPage() {
                       onChange={(e) => setCvc(e.target.value)}
                       onFocus={(e) => setFocus(e.target.name)}
                       margin="normal"
+                      required
                     />
                   </Grid>
 
@@ -344,6 +369,7 @@ export default function TypographyPage() {
                       placeholder="Country"
                       options={countryCode}
                       onChange={selectState}
+                      required
                     />
                   </Grid>
 
@@ -354,6 +380,7 @@ export default function TypographyPage() {
                       label=" select States"
                       options={unitedstates}
                       onChange={selectedState}
+                      required
                     />
                   </Grid>
 
@@ -365,6 +392,7 @@ export default function TypographyPage() {
                       onChange={(e) => setPhonePrefix(e.target.value)}
                       margin="normal"
                       type="text"
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -373,17 +401,21 @@ export default function TypographyPage() {
                       label="Email Addreess "
                       variant="outlined"
                       margin="normal"
-                      onchange={(e) => setEmail1(e.target.value)}
+                      value={email1}
+                      onChange={(e) => setEmail1(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
                       fullWidth
                       label="Address 1 "
+                      id="outlined-basic"
                       name="city"
                       variant="outlined"
                       margin="normal"
-                      onchange={(e) => setAddress1(e.target.value)}
+                      onChange={(e) => setAddress1(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -393,7 +425,8 @@ export default function TypographyPage() {
                       name="city"
                       variant="outlined"
                       margin="normal"
-                      onchange={(e) => setAddress2(e.target.value)}
+                      onChange={(e) => setAddress2(e.target.value)}
+                      required
                     />
                   </Grid>
 
@@ -404,6 +437,7 @@ export default function TypographyPage() {
                       options={storePair}
                       onChange={currencyRate}
                       variant="outlined"
+                      required
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -414,6 +448,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       onChange={(e) => converter(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -425,6 +460,7 @@ export default function TypographyPage() {
                       value={afterExchage * 109.1}
                       onChange={(e) => setAmount(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
                 </Grid>
@@ -445,6 +481,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       margin="normal"
                       onChange={(e) => setBfirstName(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -455,6 +492,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       margin="normal"
                       onChange={(e) => setBsecondname(e.target.value)}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -465,6 +503,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       margin="normal"
                       onChange={(e) => setEmail2(e.target.value)}
+                      required
                     />
                   </Grid>
 
@@ -473,7 +512,8 @@ export default function TypographyPage() {
                       label="Country"
                       placeholder="Country"
                       options={countryCode}
-                      onChange={selectState}
+                      onChange={selectCountry}
+                      required
                     />
                   </Grid>
 
@@ -481,21 +521,11 @@ export default function TypographyPage() {
                     <TextField
                       fullWidth
                       label="Beneficiary phone number "
-                      value={"+" + phonePrefix}
+                      value={prefix}
                       variant="outlined"
-                      onChage={(e) => setPhonePrefix(e.target.value)}
+                      onChange={(e) => setPprefix(e.target.value)}
                       margin="normal"
-                    >
-                      <Select />
-                    </TextField>
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      fullWidth
-                      placeholder="State"
-                      label=" select States"
-                      options={unitedstates}
+                      required
                     />
                   </Grid>
 
@@ -504,6 +534,7 @@ export default function TypographyPage() {
                       options={client}
                       onChange={handleChange}
                       placeholder="Client"
+                      required
                     />
                   </Grid>
                   <Grid item xs={6} sm={6}>
@@ -511,6 +542,7 @@ export default function TypographyPage() {
                       options={options}
                       onChange={fetchSchemes}
                       placeholder="Schemes"
+                      required
                     />
                   </Grid>
 
@@ -519,6 +551,7 @@ export default function TypographyPage() {
                       options={finalOption}
                       placeholder="Details"
                       onChange={schemes}
+                      required
                     />
                   </Grid>
 
@@ -530,6 +563,7 @@ export default function TypographyPage() {
                       variant="outlined"
                       onChange={(e) => setDescription(e.target.value)}
                       margin="normal"
+                      required
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
