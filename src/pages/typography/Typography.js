@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox, Grid, Paper, TextField } from "@material-ui/core";
 import UserService from "../../services/user.service";
-import Card from "react-credit-cards";
+//import Card from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +27,12 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Formik, Form, Field } from "formik";
+import Card from "./card/Card";
+import {
+  formatCreditCardNumber,
+  formatCVC,
+  formatExpirationDate,
+} from "./card/CardUtils";
 
 export default function TypographyPage() {
   const [client, setClient] = useState("");
@@ -292,7 +298,15 @@ export default function TypographyPage() {
         console.log(values);
       }}
     >
-      {({ errors, touched }) => (
+      {({
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+      }) => (
         <form onSubmit={onSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={true}>
