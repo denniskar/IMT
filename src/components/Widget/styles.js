@@ -1,12 +1,12 @@
 import { makeStyles } from "@material-ui/styles";
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   widgetWrapper: {
     display: "flex",
     minHeight: "100%",
   },
   widgetHeader: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(0),
     paddingBottom: theme.spacing(1),
     display: "flex",
     justifyContent: "space-between",
@@ -16,9 +16,9 @@ export default makeStyles(theme => ({
     boxShadow: theme.customShadows.widget,
   },
   widgetBody: {
-    paddingBottom: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingLeft: theme.spacing(3),
+    paddingBottom: theme.spacing(0),
+    paddingRight: theme.spacing(0),
+    paddingLeft: theme.spacing(0),
   },
   noPadding: {
     padding: 0,
@@ -41,6 +41,6 @@ export default makeStyles(theme => ({
     },
   },
   noWidgetShadow: {
-    boxShadow: 'none'
-  }
+    boxShadow: "none",
+  },
 }));

@@ -40,6 +40,7 @@ export default makeStyles((theme) => ({
   },
   formContainer: {
     width: "40%",
+    minWidth: 250,
     height: "100%",
     display: "flex",
     flexDirection: "column",
@@ -50,11 +51,11 @@ export default makeStyles((theme) => ({
     },
   },
   form: {
-    width: 320,
+    width: "",
   },
   tab: {
     fontWeight: 400,
-    fontSize: 18,
+    fontSize: 10,
   },
   greeting: {
     fontWeight: 500,
@@ -144,5 +145,11 @@ export default makeStyles((theme) => ({
       position: "absolute",
       bottom: theme.spacing(2),
     },
+  },
+  grid: {
+    width: "100%",
+
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));

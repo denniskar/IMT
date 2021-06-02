@@ -21,6 +21,12 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-input-2/lib/style.css";
 import { mdiVideoMinusOutline } from "@mdi/js";
 import axios from "axios";
+import { mainSchema } from "../validations/formValidation";
+import LocalError from "../validations/error";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Formik, Form, Field } from "formik";
 
 export default function TypographyPage() {
   const [client, setClient] = useState("");
@@ -195,7 +201,7 @@ export default function TypographyPage() {
   const exchange = (e) => {
     console.log(e);
   };
-  const handleSubmit = (event) => {
+  const onSubmit = (event) => {
     event.preventDefault();
     const formData = {
       purposeOfFund: description,
@@ -233,6 +239,7 @@ export default function TypographyPage() {
         address2: adress2,
       },
     };
+
     axios
       .post("/api/qsend/v1/transactions", formData, { headers: authHeader() })
       .then(function (res) {
@@ -275,337 +282,334 @@ export default function TypographyPage() {
     setSchemes(value.value);
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
-          <Widget title="Sender Information" disableWidgetMenu>
-            <div className={classes.PaymentBar}>
-              <Paper className={classes.layout}>
-                <Grid className={classes.paper} container spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <Card
-                      cvc={cvc}
-                      number={number}
-                      expiry={expiry}
-                      name={name}
-                      focus={focus}
-                      preview="true"
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="First Name"
-                      name="firstname"
-                      variant="outlined"
-                      margin="normal"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onFocus={(e) => setFocus(e.target.name)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Second Name "
-                      name="city"
-                      variant="outlined"
-                      onChange={(e) => setSecondNmae(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="tel"
-                      label="Card Number"
-                      value={number}
-                      name="lastName"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setNumber(e.target.value)}
-                      onFocus={(e) => setFocus(e.target.name)}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      label="Card Expiry Date"
-                      placeholder="mm/yy"
-                      name="date"
-                      // type="date"
-                      defaultValue="2021-12"
-                      margin="normal"
-                      value={expiry}
-                      onChange={(e) => setExpiry(e.target.value)}
-                      onFocus={(e) => setFocus(e.target.name)}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Cvc"
-                      name="lastName"
-                      variant="outlined"
-                      value={cvc}
-                      onChange={(e) => setCvc(e.target.value)}
-                      onFocus={(e) => setFocus(e.target.name)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      label="Country"
-                      placeholder="Country"
-                      options={countryCode}
-                      onChange={selectState}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      fullWidth
-                      placeholder="State"
-                      label=" select States"
-                      options={unitedstates}
-                      onChange={selectedState}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label=" phone number "
-                      value={phonePrefix}
-                      onChange={(e) => setPhonePrefix(e.target.value)}
-                      margin="normal"
-                      type="text"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email Addreess "
-                      variant="outlined"
-                      margin="normal"
-                      value={email1}
-                      onChange={(e) => setEmail1(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Address 1 "
-                      id="outlined-basic"
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setAddress1(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Address 2 "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setAddress2(e.target.value)}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      fullWidth
-                      placeholder="Currency Pair"
-                      options={storePair}
-                      onChange={currencyRate}
-                      variant="outlined"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label={"Enter Amount in " + currencyLabel}
-                      name="lastName"
-                      variant="outlined"
-                      onChange={(e) => converter(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label={"Amount converted to" + currencyLabel1}
-                      name="lastName"
-                      variant="outlined"
-                      value={afterExchage * 109.1}
-                      onChange={(e) => setAmount(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </div>
-          </Widget>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Widget title="Beneficiary Details" disableWidgetMenu>
-            <div className={classes.PaymentBar}>
-              <Paper className={classes.layout}>
-                <Grid className={classes.paper} container spacing={2}>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Beneficiary firstName "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setBfirstName(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Beneficiary SecondName "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setBsecondname(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email Address "
-                      name="city"
-                      variant="outlined"
-                      margin="normal"
-                      onChange={(e) => setEmail2(e.target.value)}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      label="Country"
-                      placeholder="Country"
-                      options={countryCode}
-                      onChange={selectCountry}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Beneficiary phone number "
-                      value={prefix}
-                      variant="outlined"
-                      onChange={(e) => setPprefix(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      options={client}
-                      onChange={handleChange}
-                      placeholder="Client"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      options={options}
-                      onChange={fetchSchemes}
-                      placeholder="Schemes"
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      options={finalOption}
-                      placeholder="Details"
-                      onChange={schemes}
-                      required
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Brief Description"
-                      name="lastName"
-                      variant="outlined"
-                      onChange={(e) => setDescription(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <div>
-                      <input
-                        type="checkbox"
-                        checked={showScheduled}
-                        onChange={scheduled}
+    <Formik
+      initialValues={{
+        firstName: "",
+        email: "",
+      }}
+      validationSchema={mainSchema}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+    >
+      {({ errors, touched }) => (
+        <form onSubmit={onSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={true}>
+              <Widget title="Sender Information" disableWidgetMenu>
+                <div className={classes.layout}>
+                  <Grid className={classes.paper} container spacing={2}>
+                    <Grid item xs={12} sm={12}>
+                      <Card
+                        cvc={cvc}
+                        number={number}
+                        expiry={expiry}
+                        name={name}
+                        focus={focus}
+                        preview="true"
                       />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="First Name"
+                        name="firstName"
+                        variant="outlined"
+                        margin="normal"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        onFocus={(e) => setFocus(e.target.name)}
+                      />
+                    </Grid>
+                    <LocalError
+                      touched={touched.firstName}
+                      error={errors.firstName}
+                    />
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="Second Name "
+                        name="name"
+                        variant="outlined"
+                        onChange={(e) => setSecondNmae(e.target.value)}
+                        margin="normal"
+                      />
+                    </Grid>
 
-                      <span>schedule payment</span>
-                      {showScheduled && (
-                        <Grid item xs={6} sm={12}>
-                          <TextField
-                            fullWidth
-                            label=" "
-                            type="date"
-                            name="city"
-                            variant="outlined"
-                            margin="normal"
-                          />
-                          <input type="checkbox" /> <span>every month</span>
-                        </Grid>
-                      )}
-                    </div>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        type="tel"
+                        label="Card Number"
+                        value={number}
+                        name="lastName"
+                        variant="outlined"
+                        margin="normal"
+                        onChange={(e) => setNumber(e.target.value)}
+                        onFocus={(e) => setFocus(e.target.name)}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label="Card Expiry Date"
+                        placeholder="mm/yy"
+                        name="date"
+                        // type="date"
+                        defaultValue="2021-12"
+                        margin="normal"
+                        value={expiry}
+                        onChange={(e) => setExpiry(e.target.value)}
+                        onFocus={(e) => setFocus(e.target.name)}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="Cvc"
+                        name="lastName"
+                        variant="outlined"
+                        value={cvc}
+                        onChange={(e) => setCvc(e.target.value)}
+                        onFocus={(e) => setFocus(e.target.name)}
+                        margin="normal"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Select
+                        label="Country"
+                        placeholder="Country"
+                        options={countryCode}
+                        onChange={selectState}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Select
+                        fullWidth
+                        placeholder="State"
+                        label=" select States"
+                        options={unitedstates}
+                        onChange={selectedState}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label=" phone number "
+                        value={phonePrefix}
+                        onChange={(e) => setPhonePrefix(e.target.value)}
+                        margin="normal"
+                        type="text"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="Email Addreess "
+                        variant="outlined"
+                        margin="normal"
+                        name="email"
+                        value={email1}
+                        onChange={(e) => setEmail1(e.target.value)}
+                      />
+                      <LocalError
+                        touched={touched.email}
+                        error={errors.email}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="Address 1 "
+                        id="outlined-basic"
+                        name="city"
+                        variant="outlined"
+                        margin="normal"
+                        onChange={(e) => setAddress1(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label="Address 2 "
+                        name="city"
+                        variant="outlined"
+                        margin="normal"
+                        onChange={(e) => setAddress2(e.target.value)}
+                        helperText={errors.email?.message}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <Select
+                        fullWidth
+                        placeholder="Currency Pair"
+                        options={storePair}
+                        onChange={currencyRate}
+                        variant="outlined"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label={"Enter Amount in " + currencyLabel}
+                        name="lastName"
+                        variant="outlined"
+                        onChange={(e) => converter(e.target.value)}
+                        margin="normal"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        label={"Amount converted to" + currencyLabel1}
+                        name="lastName"
+                        variant="outlined"
+                        value={afterExchage * 109.1}
+                        onChange={(e) => setAmount(e.target.value)}
+                        margin="normal"
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Paper>
-            </div>
-          </Widget>
-        </Grid>
-      </Grid>
-    </form>
+                </div>
+              </Widget>
+            </Grid>
+            <Grid item xs={12} md={true}>
+              <Widget title="Beneficiary Details" disableWidgetMenu>
+                <div>
+                  <Paper className={classes.layout}>
+                    <Grid className={classes.paper} container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Beneficiary firstName "
+                          name="city"
+                          variant="outlined"
+                          margin="normal"
+                          onChange={(e) => setBfirstName(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Beneficiary SecondName "
+                          name="city"
+                          variant="outlined"
+                          margin="normal"
+                          onChange={(e) => setBsecondname(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Email Address "
+                          name="city"
+                          variant="outlined"
+                          margin="normal"
+                          onChange={(e) => setEmail2(e.target.value)}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Select
+                          label="Country"
+                          placeholder="Country"
+                          options={countryCode}
+                          onChange={selectCountry}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Beneficiary phone number "
+                          value={prefix}
+                          variant="outlined"
+                          onChange={(e) => setPprefix(e.target.value)}
+                          margin="normal"
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Select
+                          options={client}
+                          onChange={handleChange}
+                          placeholder="Client"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Select
+                          options={options}
+                          onChange={fetchSchemes}
+                          placeholder="Schemes"
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Select
+                          options={finalOption}
+                          placeholder="Details"
+                          onChange={schemes}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Brief Description"
+                          name="lastName"
+                          onChange={(e) => setDescription(e.target.value)}
+                          margin="normal"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={showScheduled}
+                            onChange={scheduled}
+                          />
+
+                          <span>schedule payment</span>
+                          {showScheduled && (
+                            <Grid item xs={12} sm={12}>
+                              <TextField
+                                fullWidth
+                                label=" "
+                                type="date"
+                                name="city"
+                                variant="outlined"
+                                margin="normal"
+                              />
+                              <input type="checkbox" /> <span>every month</span>
+                            </Grid>
+                          )}
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        type="submit"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Paper>
+                </div>
+              </Widget>
+            </Grid>
+          </Grid>
+        </form>
+      )}
+    </Formik>
   );
 }

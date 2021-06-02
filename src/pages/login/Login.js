@@ -140,7 +140,7 @@ function Login(props) {
         <Typography className={classes.logotypeText}>Qsend System</Typography>
       </div>
       <div className={classes.formContainer}>
-        <div className={classes.form}>
+        <Grid item xs={12} sm={6} md={6} className={classes.grid}>
           <Tabs
             value={activeTabId}
             onChange={(e, id) => setActiveTabId(id)}
@@ -152,11 +152,7 @@ function Login(props) {
             <Tab label="New User" classes={{ root: classes.tab }} />
           </Tabs>
           {activeTabId === 0 && (
-            <React.Fragment>
-              <Typography variant="h3" className={classes.greeting}>
-                welcome to Qsend
-              </Typography>
-
+            <Grid>
               <div className={classes.formDividerContainer}>
                 <div className={classes.formDivider} />
                 <div className={classes.formDivider} />
@@ -229,21 +225,17 @@ function Login(props) {
                   Forget Password
                 </Button>
               </div>
-            </React.Fragment>
+            </Grid>
           )}
+
           {activeTabId === 1 && (
-            <React.Fragment>
-              <Typography variant="h5" className={classes.greeting}>
-                Welcome!
-              </Typography>
-              <Typography variant="h6" className={classes.subGreeting}>
-                Create your account
-              </Typography>
+            <Grid>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
                 </Typography>
               </Fade>
+
               <TextField
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -261,6 +253,7 @@ function Login(props) {
                 type="text"
                 fullWidth
               />
+
               <Select
                 onChange={phoneDetails}
                 margin="normal"
@@ -288,6 +281,7 @@ function Login(props) {
                 type="email"
                 fullWidth
               />
+
               <TextField
                 id="password"
                 value={password}
@@ -297,6 +291,7 @@ function Login(props) {
                 type="password"
                 fullWidth
               />
+
               <div className={classes.creatingButtonContainer}>
                 {isLoading ? (
                   <CircularProgress size={26} />
@@ -317,13 +312,13 @@ function Login(props) {
                     fullWidth
                     className={classes.createAccountButton}
                   >
-                    Create your account
+                    Create Account
                   </Button>
                 )}
               </div>
-            </React.Fragment>
+            </Grid>
           )}
-        </div>
+        </Grid>
         <Typography color="primary" className={classes.copyright}>
           © {new Date().getFullYear()}{" "}
           <a
