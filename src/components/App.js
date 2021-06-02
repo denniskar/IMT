@@ -16,7 +16,7 @@ export default function App() {
   var { isAuthenticated } = useUserState();
 
   return (
-    <HashRouter>
+    <HashRouter basename="/qsend">
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
         <Route
