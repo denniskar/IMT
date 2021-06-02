@@ -290,8 +290,11 @@ export default function TypographyPage() {
   return (
     <Formik
       initialValues={{
-        firstName: "",
+        name: "",
         email: "",
+        cvc: "",
+        number: "",
+        expiry: "",
       }}
       validationSchema={mainSchema}
       onSubmit={(values) => {
@@ -315,12 +318,11 @@ export default function TypographyPage() {
                   <Grid className={classes.paper} container spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Card
-                        cvc={cvc}
-                        number={number}
-                        expiry={expiry}
-                        name={name}
+                        number={values.number || ""}
+                        name={values.name || ""}
+                        expiry={values.expiry || ""}
+                        cvc={values.cvc || ""}
                         focus={focus}
-                        preview="true"
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -331,7 +333,8 @@ export default function TypographyPage() {
                         variant="outlined"
                         margin="normal"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        // onChange={(e) => setName(e.target.value)}
+                        onChange={handleChange}
                         onFocus={(e) => setFocus(e.target.name)}
                       />
                     </Grid>
