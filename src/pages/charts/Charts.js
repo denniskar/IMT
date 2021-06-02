@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox, Grid, Paper, TextField } from "@material-ui/core";
+import { Checkbox, Grid, Paper } from "@material-ui/core";
 import UserService from "../../services/user.service";
 import Card from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
@@ -22,6 +22,11 @@ import "react-phone-input-2/lib/style.css";
 import { mdiReload, mdiVideoMinusOutline } from "@mdi/js";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import LocalError from "../validations/error";
+import { userSchema } from "../validations/formValidation";
+import { TextField } from "formik-material-ui";
 export default function Charts() {
   const [clientData, setClientData] = useState([]);
   useEffect(() => {
@@ -81,23 +86,11 @@ export default function Charts() {
 
   var classes = useStyles();
 
-  const options = [
-    { value: "1", label: "USER" },
-    { value: "2", label: "ADMIN" },
-    { value: "3", label: "CLIENTADMIN" },
-    { value: "4", label: "CLIENTUSER" },
-  ];
-
   const selectState = (value) => {
     console.log(value);
     setCountry(value.label);
     setCode(value.value);
     setPhone("+" + value.phoneCode);
-  };
-
-  const handleRoles = (values) => {
-    console.log(values.label);
-    setRoles(values.label);
   };
 
   useEffect(() => {
@@ -157,125 +150,198 @@ export default function Charts() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
-          <Widget title="Client Details" disableWidgetMenu>
-            <div className={classes.PaymentBar}>
-              <Paper className={classes.layout}>
-                <Grid className={classes.paper} container spacing={2}>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="client Name"
-                      name="firstname"
-                      variant="outlined"
-                      value={name}
-                      margin="normal"
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="client Id "
-                      name="city"
-                      variant="outlined"
-                      value={clientId}
-                      onChange={(e) => setClientId(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Business Registration No"
-                      name="city"
-                      variant="outlined"
-                      value={registration}
-                      onChange={(e) => setRegistration(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
+    <Formik
+      initialValues={{
+        name: "",
+        clientId: "",
+        clientName: "",
+        email: "",
+        address: "",
+        businessNo: "",
+        phoneNumber: "",
+        email: "",
+        country: "",
+      }}
+      validationSchema={userSchema}
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        console.log(values);
+        setSubmitting(true);
+        alert("submitting");
+        resetForm();
+        setSubmitting(false);
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <Widget title="Client Details" disableWidgetMenu>
+                <div className={classes.PaymentBar}>
+                  <Paper className={classes.layout}>
+                    <Grid className={classes.paper} container spacing={2}>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="client Name"
+                          name="name"
+                          component={TextField}
+                          variant="outlined"
+                          value={values.name}
+                          margin="normal"
+                          //  onBlur={handleBlur}
+                          className="form-control"
+                          //onChange={(e) => setName(e.target.value)}
+                          //onChange={handleChange}
+                          required
+                        />
+                        <LocalError
+                          touched={touched.name}
+                          error={errors.name}
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="client Id "
+                          name="clientId"
+                          component={TextField}
+                          variant="outlined"
+                          value={values.clientId}
+                          // onChange={(e) => setClientId(e.target.value)}
+                          margin="normal"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="form-control"
+                          required
+                        />
+                        <LocalError
+                          touched={touched.clientId}
+                          error={errors.clientId}
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="Business Registration No"
+                          name="businessNo"
+                          component={TextField}
+                          variant="outlined"
+                          value={values.businessNo}
+                          //  onChange={(e) => setRegistration(e.target.value)}
+                          margin="normal"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="form-control"
+                          required
+                        />
+                        <LocalError
+                          touched={touched.businessNo}
+                          error={errors.businessNo}
+                        />
+                      </Grid>
 
-                  <Grid item xs={6} sm={6}>
-                    <Select
-                      label="Country"
-                      placeholder="Country"
-                      options={countryCode}
-                      onChange={selectState}
-                      required
-                    />
-                  </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <Select
+                          label="Country"
+                          placeholder="Country"
+                          options={countryCode}
+                          onChange={selectState}
+                          required
+                        />
+                      </Grid>
 
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="phoneNumber "
-                      variant="outlined"
-                      value={phone}
-                      margin="normal"
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email "
-                      name="city"
-                      variant="outlined"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      margin="normal"
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Address "
-                      variant="outlined"
-                      margin="normal"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Paper>
-            </div>
-          </Widget>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Widget title="clients" disableWidgetMenu>
-            <div className={classes.PaymentBar}>
-              <MUIDataTable
-                title="Transactions"
-                data={clientData}
-                columns={columns}
-                options={{
-                  filterType: "checkbox",
-                  rowsPerPage: 6,
-                }}
-              />
-            </div>
-          </Widget>
-        </Grid>
-      </Grid>
-    </form>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="phoneNumber "
+                          variant="outlined"
+                          name="pho"
+                          component={TextField}
+                          value={phone}
+                          margin="normal"
+                          className="form-control"
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="Email "
+                          name="email"
+                          component={TextField}
+                          variant="outlined"
+                          value={values.email}
+                          // onChange={(e) => setEmail(e.target.value)}
+                          margin="normal"
+                          onChange={handleChange}
+                          required
+                        />
+                        <LocalError
+                          touched={touched.email}
+                          error={errors.email}
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <Field
+                          fullWidth
+                          label="Address "
+                          name="address"
+                          component={TextField}
+                          variant="outlined"
+                          margin="normal"
+                          value={values.address}
+                          //onChange={(e) => setAddress(e.target.value)}
+                          onChange={handleChange}
+                          required
+                        />
+                        <LocalError
+                          touched={touched.address}
+                          error={errors.address}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Paper>
+                </div>
+              </Widget>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Widget title="clients" disableWidgetMenu>
+                <div className={classes.PaymentBar}>
+                  <MUIDataTable
+                    title="Transactions"
+                    data={clientData}
+                    columns={columns}
+                    options={{
+                      filterType: "checkbox",
+                      rowsPerPage: 6,
+                    }}
+                  />
+                </div>
+              </Widget>
+            </Grid>
+          </Grid>
+        </form>
+      )}
+    </Formik>
   );
 }

@@ -61,7 +61,7 @@ const columns = [
   { name: "date", label: " Date" },
   { name: "payer", label: "Payer" },
   { name: "beneficiary", label: "Beneficiary Name" },
-  { name: "beneficiaryPhone", label: "BeneficiaryPhone" },
+  { name: "beneficiaryPhone", label: "Benef Phone" },
   { name: "amount", label: "Amount" },
   { name: "currencyPair", label: "Currency Pair" },
   { name: "client", label: "client" },
