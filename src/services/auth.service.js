@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "api/qsend/v1";
+const API_URL = "/api/qsend/v1";
 
 const register = (username, email, password) => {
   return axios.post(API_URL + "signup", {

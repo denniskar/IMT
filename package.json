@@ -1,8 +1,8 @@
 {
-  "name": "react-material-admin",
+  "name": "qsend",
   "version": "1.1.0",
   "private": true,
-  "homepage": "./",
+  "homepage": ".",
   "resolutions": {
     "websocket-extensions": "^0.1.4",
     "node-forge": "^0.10.0",
