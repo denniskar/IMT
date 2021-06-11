@@ -98,7 +98,7 @@ function Login(props) {
       country: code,
     };
 
-    console.log(formData);
+  
 
     axios
       .post("/api/qsend/v1/users/self-register", formData)

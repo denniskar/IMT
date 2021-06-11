@@ -1,5 +1,6 @@
 import React from "react";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
+import history from '../config/history'
 
 // components
 import Layout from "./Layout";
@@ -10,25 +11,27 @@ import Login from "../pages/login";
 
 // context
 import { useUserState } from "../context/UserContext";
+                                                                                                                           
 
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
 
+
   return (
-    <HashRouter basename="/qsend">
+    <Router history={history}>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
         <Route
           exact
           path="/app"
-          render={() => <Redirect to="/app/dashboard" />}
+          render={() => <Redirect to="/app/dashboard"/>}
         />
         <PrivateRoute path="/app" component={Layout} />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>
-    </HashRouter>
+    </Router>
   );
 
   // #######################################################################
