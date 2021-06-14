@@ -159,12 +159,12 @@ export default function TypographyPage() {
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={true}>
           <Widget title="User Details" disableWidgetMenu>
             <div className={classes.PaymentBar}>
               <Paper className={classes.layout}>
                 <Grid className={classes.paper} container spacing={2}>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="First Name"
@@ -175,7 +175,7 @@ export default function TypographyPage() {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Second Name "
@@ -187,7 +187,7 @@ export default function TypographyPage() {
                     />
                   </Grid>
 
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <Select
                       label="Country"
                       placeholder="Country"
@@ -195,7 +195,7 @@ export default function TypographyPage() {
                       onChange={selectState}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <Select
                       fullWidth
                       placeholder="role"
@@ -205,7 +205,7 @@ export default function TypographyPage() {
                     />
                   </Grid>
 
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="phoneNumber "
@@ -215,7 +215,7 @@ export default function TypographyPage() {
                       onChange={(e) => setPhone(e.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Email "
@@ -226,7 +226,7 @@ export default function TypographyPage() {
                       margin="normal"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="password "
@@ -252,7 +252,7 @@ export default function TypographyPage() {
             </div>
           </Widget>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={true}>
           <Widget title="users  tables" disableWidgetMenu>
             <div className={classes.PaymentBar}>
               <MUIDataTable

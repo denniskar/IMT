@@ -166,7 +166,6 @@ export default function Charts() {
       onSubmit={(values, { setSubmitting, resetForm }) => {
         console.log(values);
         setSubmitting(true);
-        alert("submitting");
         resetForm();
         setSubmitting(false);
       }}
@@ -182,7 +181,7 @@ export default function Charts() {
       }) => (
         <form onSubmit={handleSubmit}>
           <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={true}>
               <Widget title="Client Details" disableWidgetMenu>
                 <div className={classes.PaymentBar}>
                   <Paper className={classes.layout}>
@@ -324,7 +323,7 @@ export default function Charts() {
                 </div>
               </Widget>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={true}>
               <Widget title="clients" disableWidgetMenu>
                 <div className={classes.PaymentBar}>
                   <MUIDataTable

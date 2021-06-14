@@ -115,7 +115,7 @@ export default function TypographyPage() {
     { value: "3", label: "SCHEME" },
   ];
 
-  const handleChange = (value) => {
+  const handleClient = (value) => {
     SetStoreValue(value.value);
   };
 
@@ -207,19 +207,18 @@ export default function TypographyPage() {
   const exchange = (e) => {
     console.log(e);
   };
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = (values, { setSubmitting, resetForm }) => {
     const formData = {
       purposeOfFund: description,
       transactionType: ftransactionTypeCode, // only allows  FOSA,LOAN,SCHEME
       transactionTypeCode: schemess, // if transactionType is FOSA,leave blank else provide either schemeCode or loanTypeCode
-      email: email1,
+      email: values.email,
       amount: converted,
       currencyPair: currencyPair,
       exchangeRate: 107.1,
       beneficiary: {
-        firstName: bFirstname,
-        lastName: bSecondName,
+        firstName: values.beneficiaryFname,
+        lastName: values.beneficiarySname,
         clientId: storeValue, // clientId of client to which beneficiary belongs
         phone: {
           phone: prefix,
@@ -228,12 +227,12 @@ export default function TypographyPage() {
       },
       billingInformation: {
         cardData: {
-          creditCardNumber: number, // takes a valid credit card number
-          cardSecurityCode: cvc, // card CVC - 3 digits long
-          expiryDate: expiry, // card expiry date in the format MM/YY
+          creditCardNumber: values.number, // takes a valid credit card number
+          cardSecurityCode: values.cvc, // card CVC - 3 digits long
+          expiryDate: values.expiry, // card expiry date in the format MM/YY
         },
-        firstName: name,
-        lastName: secondName,
+        firstName: values.name,
+        lastName: values.secondName,
         phone: {
           phone: phonePrefix,
           countryCode: country,
@@ -255,10 +254,11 @@ export default function TypographyPage() {
           //     res.data.message,
           //     'success'
           // )
-          toast.success(res.data.message, {
+          toast.success("Success,Please check your email for the receipt", {
             position: toast.POSITION.TOP_CENTER,
           });
           reload();
+          resetForm();
         } else {
           // Swal.fire(
           //     '',
@@ -270,6 +270,7 @@ export default function TypographyPage() {
           });
         }
       });
+    setSubmitting(false);
   };
 
   const scheduled = () => {
@@ -291,14 +292,19 @@ export default function TypographyPage() {
     <Formik
       initialValues={{
         name: "",
+        secondName: "",
         email: "",
         cvc: "",
         number: "",
         expiry: "",
+        beneficiaryFname: "",
+        beneficiarySname: "",
+        email2: "",
       }}
       validationSchema={mainSchema}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        onSubmit(values, { setSubmitting, resetForm });
+        setSubmitting(true);
       }}
     >
       {({
@@ -310,7 +316,7 @@ export default function TypographyPage() {
         handleSubmit,
         isSubmitting,
       }) => (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={true}>
               <Widget title="Sender Information" disableWidgetMenu>
@@ -327,73 +333,90 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="First Name"
-                        name="firstName"
+                        name="name"
                         variant="outlined"
                         margin="normal"
-                        value={name}
+                        value={values.name}
                         // onChange={(e) => setName(e.target.value)}
                         onChange={handleChange}
                         onFocus={(e) => setFocus(e.target.name)}
                       />
+                      <LocalError touched={touched.name} error={errors.name} />
                     </Grid>
-                    <LocalError
-                      touched={touched.firstName}
-                      error={errors.firstName}
-                    />
+
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="Second Name "
-                        name="name"
+                        name="secondName"
                         variant="outlined"
-                        onChange={(e) => setSecondNmae(e.target.value)}
+                        onChange={handleChange}
                         margin="normal"
+                        onBlur={handleBlur}
+                      />
+                      <LocalError
+                        touched={touched.secondName}
+                        error={errors.secondName}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         type="tel"
                         label="Card Number"
-                        value={number}
-                        name="lastName"
+                        value={values.number}
+                        name="number"
                         variant="outlined"
                         margin="normal"
-                        onChange={(e) => setNumber(e.target.value)}
+                        onChange={handleChange}
                         onFocus={(e) => setFocus(e.target.name)}
+                      />
+                      <LocalError
+                        touched={touched.number}
+                        error={errors.number}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         variant="outlined"
                         label="Card Expiry Date"
                         placeholder="mm/yy"
-                        name="date"
+                        name="expiry"
                         // type="date"
                         defaultValue="2021-12"
                         margin="normal"
-                        value={expiry}
-                        onChange={(e) => setExpiry(e.target.value)}
+                        value={values.expiry}
+                        onChange={handleChange}
                         onFocus={(e) => setFocus(e.target.name)}
+                      />
+                      <LocalError
+                        touched={touched.expiry}
+                        error={errors.expiry}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="Cvc"
-                        name="lastName"
+                        name="cvc"
                         variant="outlined"
-                        value={cvc}
-                        onChange={(e) => setCvc(e.target.value)}
+                        value={values.cvc}
+                        onChange={handleChange}
                         onFocus={(e) => setFocus(e.target.name)}
                         margin="normal"
                       />
+                      <LocalError touched={touched.cvc} error={errors.cvc} />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -417,6 +440,7 @@ export default function TypographyPage() {
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label=" phone number "
                         value={phonePrefix}
@@ -427,13 +451,14 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="Email Addreess "
                         variant="outlined"
                         margin="normal"
                         name="email"
-                        value={email1}
-                        onChange={(e) => setEmail1(e.target.value)}
+                        value={values.email}
+                        onChange={handleChange}
                       />
                       <LocalError
                         touched={touched.email}
@@ -442,6 +467,7 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="Address 1 "
                         id="outlined-basic"
@@ -453,13 +479,13 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label="Address 2 "
                         name="city"
                         variant="outlined"
                         margin="normal"
                         onChange={(e) => setAddress2(e.target.value)}
-                        helperText={errors.email?.message}
                       />
                     </Grid>
 
@@ -474,6 +500,7 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label={"Enter Amount in " + currencyLabel}
                         name="lastName"
@@ -484,6 +511,7 @@ export default function TypographyPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        required
                         fullWidth
                         label={"Amount converted to" + currencyLabel1}
                         name="lastName"
@@ -504,32 +532,50 @@ export default function TypographyPage() {
                     <Grid className={classes.paper} container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField
+                          required
                           fullWidth
                           label="Beneficiary firstName "
-                          name="city"
+                          name="beneficiaryFname"
                           variant="outlined"
+                          value={values.beneficiaryFname}
                           margin="normal"
-                          onChange={(e) => setBfirstName(e.target.value)}
+                          onChange={handleChange}
+                        />
+                        <LocalError
+                          touched={touched.beneficiaryFname}
+                          error={errors.beneficiaryFname}
                         />
                       </Grid>
                       <Grid item xs={12} sm={6}>
                         <TextField
+                          required
                           fullWidth
                           label="Beneficiary SecondName "
-                          name="city"
+                          name="beneficiarySname"
                           variant="outlined"
+                          value={values.beneficiarySname}
                           margin="normal"
-                          onChange={(e) => setBsecondname(e.target.value)}
+                          onChange={handleChange}
+                        />
+                        <LocalError
+                          touched={touched.beneficiarySname}
+                          error={errors.beneficiarySname}
                         />
                       </Grid>
                       <Grid item xs={12} sm={6}>
                         <TextField
+                          required
                           fullWidth
                           label="Email Address "
-                          name="city"
+                          name="email2"
+                          value={values.email2}
                           variant="outlined"
                           margin="normal"
-                          onChange={(e) => setEmail2(e.target.value)}
+                          onChange={handleChange}
+                        />
+                        <LocalError
+                          touched={touched.email2}
+                          error={errors.email2}
                         />
                       </Grid>
 
@@ -544,6 +590,7 @@ export default function TypographyPage() {
 
                       <Grid item xs={12} sm={6}>
                         <TextField
+                          required
                           fullWidth
                           label="Beneficiary phone number "
                           value={prefix}
@@ -556,7 +603,7 @@ export default function TypographyPage() {
                       <Grid item xs={12} sm={6}>
                         <Select
                           options={client}
-                          onChange={handleChange}
+                          onChange={handleClient}
                           placeholder="Client"
                         />
                       </Grid>
@@ -578,6 +625,7 @@ export default function TypographyPage() {
 
                       <Grid item xs={12} sm={6}>
                         <TextField
+                          required
                           fullWidth
                           label="Brief Description"
                           name="lastName"
@@ -597,6 +645,7 @@ export default function TypographyPage() {
                           {showScheduled && (
                             <Grid item xs={12} sm={12}>
                               <TextField
+                                required
                                 fullWidth
                                 label=" "
                                 type="date"
@@ -616,6 +665,7 @@ export default function TypographyPage() {
                         color="primary"
                         className={classes.button}
                         type="submit"
+                        disabled={isSubmitting}
                       >
                         Submit
                       </Button>

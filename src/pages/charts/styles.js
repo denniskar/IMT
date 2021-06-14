@@ -12,9 +12,10 @@ export default makeStyles((theme) => ({
   text: {
     marginBottom: theme.spacing(2),
   },
+
   button: {
-    marginBottom: theme.spacing(2),
-    marginLeft: theme.spacing(30),
+    display: "flex",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   PaymentBar: {
@@ -27,8 +28,8 @@ export default makeStyles((theme) => ({
   },
   layout: {
     width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(0),
+    marginRight: theme.spacing(0),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginLeft: "auto",
@@ -37,12 +38,12 @@ export default makeStyles((theme) => ({
   },
   paper: {
     marginTop: theme.spacing(0),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
+    marginBottom: theme.spacing(0),
+    padding: theme.spacing(0),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
       marginTop: theme.spacing(0),
       marginBottom: theme.spacing(8),
-      padding: theme.spacing(3),
+      padding: theme.spacing(0),
     },
   },
 }));
