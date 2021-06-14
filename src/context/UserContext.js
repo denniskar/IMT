@@ -1,5 +1,6 @@
 import React from "react";
 import AuthService from "../services/auth.service";
+import { toast } from "react-toastify";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -9,6 +10,8 @@ function userReducer(state, action) {
     case "LOGIN_SUCCESS":
       return { ...state, isAuthenticated: true };
     case "SIGN_OUT_SUCCESS":
+      return { ...state, isAuthenticated: false };
+    case "LOGIN_FAILURE":
       return { ...state, isAuthenticated: false };
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -55,15 +58,41 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
   setIsLoading(true);
 
   if (!!login && !!password) {
-    AuthService.login(login, password).then(() => {
-      setTimeout(() => {
-        setError(null);
-        setIsLoading(false);
-        dispatch({ type: "LOGIN_SUCCESS" });
+    const data = AuthService.login(login, password)
+      .then((response) => {
+        if (response.data.headerValue) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          setError(null);
+          setIsLoading(false);
+          dispatch({ type: "LOGIN_SUCCESS" });
 
-        history.push("/app/dashboard");
-      }, 2000);
-    });
+          history.push("/app/dashboard");
+        }
+        // return response.data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+        dispatch({ type: "LOGIN_FAILURE" });
+        setError(true);
+        setIsLoading(false);
+        if(error.response.status == 403)
+        {
+          if (error.response.data.status === 1) {          
+            toast.error("Invalid login credentials", {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }else{
+            toast.error(error.response.data.message, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }
+        }else{
+          toast.error("Error occured contact admin", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+    
+      });
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
     setError(true);
