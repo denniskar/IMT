@@ -1,6 +1,6 @@
 import React from "react";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
-import history from '../config/history'
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+// import history from '../config/history'
 
 // components
 import Layout from "./Layout";
@@ -19,7 +19,7 @@ export default function App() {
 
 
   return (
-    <Router history={history}>
+    <BrowserRouter basename="/qsend">
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
         <Route
@@ -31,7 +31,7 @@ export default function App() {
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 
   // #######################################################################
