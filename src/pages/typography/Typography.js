@@ -245,15 +245,18 @@ export default function TypographyPage() {
       },
     };
 
+    
     axios
       .post("/api/qsend/v1/transactions", formData, { headers: authHeader() })
       .then(function (res) {
+      
         if (res.data.status === 0) {
           // Swal.fire(
           //     '',
           //     res.data.message,
           //     'success'
           // )
+          setSubmitting(false);
           toast.success("Success,Please check your email for the receipt", {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -269,8 +272,43 @@ export default function TypographyPage() {
             position: toast.POSITION.TOP_CENTER,
           });
         }
-      });
-    setSubmitting(false);
+      }).catch((error) =>{
+        const err = error.response;
+
+        console.log(err);
+        setSubmitting(false);
+        if(err.status === 400)
+        {
+          if(err.data.status === 1)
+          {
+            const messageObject = JSON.parse(err.data.message);
+            if(messageObject.length > 0)
+            {
+              messageObject.forEach(msg => {
+                
+                if(msg.billingInformation.cardData.expiryDate)
+                {
+                  toast.error(msg.billingInformation.cardData.expiryDate, {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                }
+
+                if(msg.billingInformation.phone.phone)
+                {
+                  toast.error(msg.billingInformation.phone.phone, {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                }
+              });                            
+
+            }else{
+              toast.error("Contact admin", {
+                position: toast.POSITION.TOP_CENTER,
+              });
+            }
+          }
+        }
+      })
   };
 
   const scheduled = () => {
