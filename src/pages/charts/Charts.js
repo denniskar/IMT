@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, TextField } from "react";
 import { Checkbox, Grid, Paper } from "@material-ui/core";
 import UserService from "../../services/user.service";
 import Card from "react-credit-cards";
@@ -26,7 +26,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import LocalError from "../validations/error";
 import { userSchema } from "../validations/formValidation";
-import { TextField } from "formik-material-ui";
+
 export default function Charts() {
   const [clientData, setClientData] = useState([]);
   useEffect(() => {
@@ -187,11 +187,10 @@ export default function Charts() {
                   <Paper className={classes.layout}>
                     <Grid className={classes.paper} container spacing={2}>
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="client Name"
                           name="name"
-                          component={TextField}
                           variant="outlined"
                           value={values.name}
                           margin="normal"
@@ -207,11 +206,10 @@ export default function Charts() {
                         />
                       </Grid>
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="client Id "
                           name="clientId"
-                          component={TextField}
                           variant="outlined"
                           value={values.clientId}
                           // onChange={(e) => setClientId(e.target.value)}
@@ -227,11 +225,10 @@ export default function Charts() {
                         />
                       </Grid>
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="Business Registration No"
                           name="businessNo"
-                          component={TextField}
                           variant="outlined"
                           value={values.businessNo}
                           //  onChange={(e) => setRegistration(e.target.value)}
@@ -258,12 +255,11 @@ export default function Charts() {
                       </Grid>
 
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="phoneNumber "
                           variant="outlined"
                           name="pho"
-                          component={TextField}
                           value={phone}
                           margin="normal"
                           className="form-control"
@@ -272,11 +268,10 @@ export default function Charts() {
                         />
                       </Grid>
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="Email "
                           name="email"
-                          component={TextField}
                           variant="outlined"
                           value={values.email}
                           // onChange={(e) => setEmail(e.target.value)}
@@ -290,11 +285,10 @@ export default function Charts() {
                         />
                       </Grid>
                       <Grid item xs={6} sm={6}>
-                        <Field
+                        <TextField
                           fullWidth
                           label="Address "
                           name="address"
-                          component={TextField}
                           variant="outlined"
                           margin="normal"
                           value={values.address}
