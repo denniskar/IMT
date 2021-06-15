@@ -71,7 +71,6 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
         // return response.data;
       })
       .catch((error) => {
-        console.log(error.response);
         dispatch({ type: "LOGIN_FAILURE" });
         setError(true);
         setIsLoading(false);
