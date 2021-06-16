@@ -71,7 +71,7 @@ export const mainSchema = yup.object().shape({
     .string()
     .test(
       "test-number",
-      "expiry date is invalid",
+      " cvc is invalid",
       (value) => valid.cvv(value).isValid,
     ),
   email2: yup.string().email().required(),
