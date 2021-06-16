@@ -61,7 +61,7 @@ export default function TypographyPage() {
   const [prefix, setPprefix] = useState("");
   const [code1, setCode1] = useState("");
   const [code2, setCode2] = useState("");
-
+  const [currencyRatee, setCurrencyRate] = useState("");
   //modified select values
   const [schemess, setSchemes] = useState("");
   const [ustates, setUStates] = useState("");
@@ -193,14 +193,15 @@ export default function TypographyPage() {
   }, []);
 
   const currencyRate = (value) => {
+    console.log(value.value);
     setCurrencyPair(value.label);
     const split = value.label.toString();
     const splited = split.substring(0, 3);
     const splited2 = split.substring(5, 9);
     setCurrencyLabel(splited);
     setCurrencyLabel2(splited2);
-    userService.exchangeRate().then((response) => {
-      console.log(response);
+    userService.exchangeRate(value.value).then((response) => {
+      setCurrencyRate(response.data.rate);
     });
   };
 
@@ -215,7 +216,7 @@ export default function TypographyPage() {
       email: values.email,
       amount: converted,
       currencyPair: currencyPair,
-      exchangeRate: 107.1,
+      exchangeRate: currencyRatee,
       beneficiary: {
         firstName: values.beneficiaryFname,
         lastName: values.beneficiarySname,
@@ -245,11 +246,9 @@ export default function TypographyPage() {
       },
     };
 
-    
     axios
       .post("/api/qsend/v1/transactions", formData, { headers: authHeader() })
       .then(function (res) {
-      
         if (res.data.status === 0) {
           // Swal.fire(
           //     '',
@@ -272,43 +271,55 @@ export default function TypographyPage() {
             position: toast.POSITION.TOP_CENTER,
           });
         }
-      }).catch((error) =>{
+      })
+      .catch((error) => {
         const err = error.response;
 
-        console.log(err);
         setSubmitting(false);
-        if(err.status === 400)
-        {
-          if(err.data.status === 1)
-          {
+        if (err.status === 400) {
+          if (err.data.status === 1) {
             const messageObject = JSON.parse(err.data.message);
-            if(messageObject.length > 0)
-            {
-              messageObject.forEach(msg => {
-                
-                if(msg.billingInformation.cardData.expiryDate)
-                {
-                  toast.error(msg.billingInformation.cardData.expiryDate, {
-                    position: toast.POSITION.TOP_CENTER,
-                  });
-                }
+            console.log(messageObject);
+            console.log(Object.keys(messageObject));
+            // if (messageObject.length > 0) {
+            //   messageObject.forEach((msg) => {
+            //     if (msg.billingInformation.cardData.expiryDate) {
+            //       toast.error(msg.billingInformation.cardData.expiryDate, {
+            //         position: toast.POSITION.TOP_CENTER,
+            //       });
+            //     }
 
-                if(msg.billingInformation.phone.phone)
-                {
-                  toast.error(msg.billingInformation.phone.phone, {
-                    position: toast.POSITION.TOP_CENTER,
-                  });
-                }
-              });                            
+            //     if (msg.billingInformation.phone.phone) {
+            //       toast.error(msg.billingInformation.phone.phone, {
+            //         position: toast.POSITION.TOP_CENTER,
+            //       });
+            //     }
+            //   });
+            // } else {
+            //   toast.error("Contact admin", {
+            //     position: toast.POSITION.TOP_CENTER,
+            //   });
+            // }
 
-            }else{
-              toast.error("Contact admin", {
+            const displays = messageObject.map((display) => {
+              toast.error(Object.values(display).toString(), {
                 position: toast.POSITION.TOP_CENTER,
+                autoDismissTimeout: 20000,
               });
+            });
+
+            switch (displays) {
+              case "beneficiary.phone":
+                break;
+              case "u":
+                // code block
+                break;
+              default:
+              // code block
             }
           }
         }
-      })
+      });
   };
 
   const scheduled = () => {

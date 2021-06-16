@@ -2,10 +2,10 @@ import axios from "axios";
 import authHeader from "./auth-header";
 
 axios.create({
-  baseURL: '/',
+  baseURL: "/",
   headers: {
-      'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 const API_URL = "/api/qsend/v1";
@@ -61,8 +61,10 @@ const country = () => {
 const currencyPair = () => {
   return axios.get(API_URL + "/currency/pair", { headers: authHeader() });
 };
-const exchangeRate = () => {
-  return axios.get(API_URL + "/currency/rates", { headers: authHeader() });
+const exchangeRate = (id) => {
+  return axios.get(API_URL + "/currency/rates/" + id, {
+    headers: authHeader(),
+  });
 };
 
 const transaction = () => {
@@ -76,8 +78,10 @@ const clients = () => {
   return axios.get(API_URL + " /clients", { headers: authHeader() });
 };
 
-const userTransactions = () => {
-  return axios.get(API_URL + "", { headers: authHeader() });
+const userTransactions = (id) => {
+  return axios.get(API_URL + "/transactions/findByUser/" + id, {
+    headers: authHeader(),
+  });
 };
 export default {
   getPublicContent,
